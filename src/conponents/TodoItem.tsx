@@ -16,8 +16,7 @@ export const TodoItem = ({ todo, onClick }: Props) => {
     }
 
     return (
-        <div
-        key={todo.id}
+      <div
         style={{
           display: 'flex',
           alignItems: 'center',
