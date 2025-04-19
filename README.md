@@ -13,8 +13,7 @@ React + TypeScript + Vite で作成した、ローカル端末だけで完結す
 - リロード後も消えないローカルストレージ保存
 
 ## 技術スタック
-- フレームワーク：React 18.x
-- 言語：TypeScript 4.x
-- バンドラ：Vite 5.x
-- スタイリング：CSS Modules（または任意の方法）
+- フレームワーク：React
+- 言語：TypeScript
+- バンドラ：Vite
 - データ永続化：localStorage
