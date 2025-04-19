@@ -38,13 +38,21 @@ function App() {
     // 3. 一致する TODO の completed を反転させて返す
     // 4. 新しい TODO を追加した配列を setTodos に渡す
     setTodos((prevTodos) =>
-      // TODO: Jsの本読む
       prevTodos.map((todo) =>
-        todo.id === id ? {
-          ...todo,
-          completed: true,
-          completedAt: new Date(),
-        } : todo
+        {
+          // id が一致する TODO を探す
+          if (todo.id === id) {
+            // 一致する TODO の completed を反転させる            
+            return {
+              ...todo,
+              // 三項演算子を使って、completed を反転させる
+              completed: !todo.completed,
+              completedAt: todo.completed ? undefined : new Date(),
+            }
+          }
+          // 一致しない TODO はそのまま返す
+          return todo
+        }
       )
     )
   }
