@@ -1,25 +1,16 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import './App.css'
-
-type TodoItem = {
-  id: number,
-  title: string,
-  // 完了してたら true, そうでなければ false
-  completed: boolean,
-  // 登録日
-  createdAt: Date,
-  // 完了日
-  completedAt?: Date,
-}
+import { TodoItemType } from './type'
+import { TodoItem } from './conponents/TodoItem'
 
 const LocalStorageKey = 'todos'
 
 function App() {
-  const [todos, setTodos] = useState<TodoItem[]>([])
+  const [todos, setTodos] = useState<TodoItemType[]>([])
 
   // TODOの追加処理
   const addTodo = (title: string) => {
-    const newTodo: TodoItem = {
+    const newTodo: TodoItemType = {
       id: Math.floor(Math.random() * 10000),
       title,
       completed: false,
@@ -65,7 +56,7 @@ function App() {
 
   const [inputValue, setInputValue] = useState('')
 
-  const writeTodos = (todos: TodoItem[]) => {
+  const writeTodos = (todos: TodoItemType[]) => {
     const todosString = JSON.stringify(todos)
 
     // ローカルストレージに todos を保存する
@@ -79,7 +70,7 @@ function App() {
     console.log('todos', todos)
     if (todos) {
       // JSON.parse を使って、文字列をオブジェクトに変換する
-      const parsedTodos: TodoItem[] = JSON.parse(todos)
+      const parsedTodos: TodoItemType[] = JSON.parse(todos)
       // parsedTodos の中の completedAt を Date 型に変換する
       const todosWithDate = parsedTodos.map((todo) => {
         return {
@@ -168,49 +159,18 @@ function App() {
           {todos.map((todo) => {
             // 完了している TODO は表示しない
             if (todo.completed) {
-              return <></>
+              return <Fragment key={todo.id} />
             }
 
             return (
-              <div
+              <TodoItem
                 key={todo.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '10px',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  backgroundColor: '#fff',
-                }}
-              >
-                {/* チェックボックス */}
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id)}
-                  style={{
-                    marginRight: '10px',
-                  }}
-                />
-                {/* TODOのタイトル */}
-                <span>
-                  {todo.title}
-                </span>
-                {/* TODOの登録日 日時*/}
-                <span
-                  style={{
-                    marginLeft: 'auto',
-                    fontSize: '12px',
-                    color: '#aaa',
-                  }}
-                >
-                  登録日: {todo.createdAt.toLocaleDateString()} {todo.createdAt.toLocaleTimeString()}
-                </span>
-              </div>
+                todo={todo}
+                onClick={() => toggleTodo(todo.id)}
+              />
             )
           })}
         </div>
-
         <h2
           style={{
             fontSize: '20px',
@@ -231,45 +191,15 @@ function App() {
           {todos.map((todo) => {
             // 未完了の TODO は表示しない
             if (!todo.completed) {
-              return <></>
+              return <Fragment key={todo.id} />
             }
 
             return (
-              <div
+              <TodoItem
                 key={todo.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '10px',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  backgroundColor: '#fff',
-                }}
-              >
-                {/* チェックボックス */}
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id)}
-                  style={{
-                    marginRight: '10px',
-                  }}
-                />
-                {/* TODOのタイトル */}
-                <span>
-                  {todo.title}
-                </span>
-                {/* TODOの登録日 日時*/}
-                <span
-                  style={{
-                    marginLeft: 'auto',
-                    fontSize: '12px',
-                    color: '#aaa',
-                  }}
-                >
-                  完了日: {todo.completedAt?.toLocaleDateString()} {todo.completedAt?.toLocaleTimeString()}
-                </span>
-              </div>
+                todo={todo}
+                onClick={() => toggleTodo(todo.id)}
+              />
             )
           })}
         </div>
