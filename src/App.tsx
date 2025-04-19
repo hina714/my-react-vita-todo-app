@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 type TodoItem = {
@@ -12,6 +12,8 @@ type TodoItem = {
   completedAt?: Date,
 }
 
+const LocalStorageKey = 'todos'
+
 function App() {
   const [todos, setTodos] = useState<TodoItem[]>([])
 
@@ -23,11 +25,16 @@ function App() {
       completed: false,
       createdAt: new Date(),
     }
+
+    const newTodos = [...todos, newTodo]
+
     // setTodos を使って、todos の状態を更新する
     // 1. prevTodos を引数に取る関数を渡す
     // 2. prevTodos の配列に新しい TODO を追加して返す
     // 3. 新しい TODO を追加した配列を setTodos に渡す
-    setTodos((prevTodos) => [...prevTodos, newTodo])
+    setTodos(newTodos)
+    // todos をローカルストレージに保存する
+    writeTodos(newTodos)
   }
 
   // TODOの完了
@@ -37,27 +44,59 @@ function App() {
     // 2. prevTodos の配列の中から、id が一致する TODO を探す
     // 3. 一致する TODO の completed を反転させて返す
     // 4. 新しい TODO を追加した配列を setTodos に渡す
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        {
-          // id が一致する TODO を探す
-          if (todo.id === id) {
-            // 一致する TODO の completed を反転させる            
-            return {
-              ...todo,
-              // 三項演算子を使って、completed を反転させる
-              completed: !todo.completed,
-              completedAt: todo.completed ? undefined : new Date(),
-            }
-          }
-          // 一致しない TODO はそのまま返す
-          return todo
+    const newTodos = todos.map((todo) => {
+      // id が一致する TODO を探す
+      if (todo.id === id) {
+        // 一致する TODO の completed を反転させる
+        return {
+          ...todo,
+          completed: !todo.completed,
+          completedAt: todo.completed ? undefined : new Date(),
         }
-      )
-    )
+      }
+      // 一致しない TODO はそのまま返す
+      return todo
+    })
+
+    setTodos(newTodos)
+    // todos をローカルストレージに保存する
+    writeTodos(newTodos)
   }
 
   const [inputValue, setInputValue] = useState('')
+
+  const writeTodos = (todos: TodoItem[]) => {
+    const todosString = JSON.stringify(todos)
+
+    // ローカルストレージに todos を保存する
+    localStorage.setItem(LocalStorageKey, todosString)
+    console.log('todosString', todosString)
+  }    
+
+  const fetchTodos = () => {
+    // ローカルストレージから todos を取得する
+    const todos = localStorage.getItem(LocalStorageKey)
+    console.log('todos', todos)
+    if (todos) {
+      // JSON.parse を使って、文字列をオブジェクトに変換する
+      const parsedTodos: TodoItem[] = JSON.parse(todos)
+      // parsedTodos の中の completedAt を Date 型に変換する
+      const todosWithDate = parsedTodos.map((todo) => {
+        return {
+          ...todo,
+          createdAt: new Date(todo.createdAt),
+          completedAt: todo.completedAt ? new Date(todo.completedAt) : undefined,
+        }
+      })
+      // setTodos を使って、todos の状態を更新する
+      setTodos(todosWithDate)
+    }
+  }
+
+  useEffect(() => {
+    fetchTodos()
+  }, [])
+
 
   return (
     <>
