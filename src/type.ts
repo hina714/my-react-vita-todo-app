@@ -7,4 +7,7 @@ export type TodoItemType = {
     createdAt: Date,
     // 完了日
     completedAt?: Date,
+    // 完了／未完了タスクが0件の場合は、該当セクションを非表示にする
+    isHiddenCompleted?: boolean,
+    isHiddenUncompleted?: boolean,
 }
