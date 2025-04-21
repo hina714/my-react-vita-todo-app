@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import './App.css'
 import { TodoItemType } from './type'
 import { TodoItem } from './conponents/TodoItem'
+import { TodoHeading } from './conponents/TodoHeading'
 
 const LocalStorageKey = 'todos'
 
@@ -150,18 +151,13 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
           borderTop: '1px solid #ccc',
           paddingTop: '10px',
         }}
+        
       >
-        <h2
-          style={{
-            fontSize: '20px',
-            fontWeight: 'bold',
-            marginBottom: '10px',
-            color: '#007bff',
-          }}
-        >
-          未完了のタスク
-        </h2>
-
+          
+        <TodoHeading      
+          title="未完了のタスク"
+          color='#007bff'
+        />
         <div
           style={{
             display: 'flex',
@@ -184,16 +180,12 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
             )
           })}
         </div>
-        <h2
-          style={{
-            fontSize: '20px',
-            fontWeight: 'bold',
-            marginBottom: '10px',
-            color: '#28a745',
-          }}
-        >
-          完了したタスク
-        </h2>
+       
+          <TodoHeading
+            title="完了したタスク"
+            color='#28a745'
+          />
+        
         <div
           style={{
             display: 'flex',
