@@ -8,6 +8,14 @@ const LocalStorageKey = 'todos'
 function App() {
   const [todos, setTodos] = useState<TodoItemType[]>([])
 
+  // App.tsx の先頭あたり
+const totalCount      = todos.length
+const incompleteCount = todos.filter(t => !t.completed).length
+const completeCount   = todos.filter(t => t.completed).length
+
+console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complete: ${completeCount}`)
+
+
   // TODOの追加処理
   const addTodo = (title: string) => {
     const newTodo: TodoItemType = {
@@ -96,6 +104,10 @@ function App() {
         style={{
           display: 'flex',
         }}
+        //全体,未完了,完了それぞれのタスク件数を画面上に表示する  
+        // className="todo-count"
+        className="todo-count"
+
       >
         <input
           type="text"
@@ -109,6 +121,7 @@ function App() {
             borderRadius: '4px',
             padding: '0 10px'
           }}
+          　　
         />
         <button
           onClick={() => {
@@ -195,11 +208,41 @@ function App() {
             }
 
             return (
-              <TodoItem
+              <div
                 key={todo.id}
-                todo={todo}
-                onClick={() => toggleTodo(todo.id)}
-              />
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '10px',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  backgroundColor: '#fff',
+                }}
+              >
+                {/* チェックボックス */}
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => toggleTodo(todo.id)}
+                  style={{
+                    marginRight: '10px',
+                  }}
+                />
+                {/* TODOのタイトル */}
+                <span>
+                  {todo.title}
+                </span>
+                {/* TODOの登録日 日時*/}
+                <span
+                  style={{
+                    marginLeft: 'auto',
+                    fontSize: '12px',
+                    color: '#aaa',
+                  }}
+                >
+                  完了日: {todo.completedAt?.toLocaleDateString()} {todo.completedAt?.toLocaleTimeString()}
+                </span>
+              </div>
             )
           })}
         </div>
