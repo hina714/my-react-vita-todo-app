@@ -1,8 +1,7 @@
-import { Fragment, useEffect, useState } from 'react'
+import {　useEffect, useState } from 'react'
 import './App.css'
 import { TodoItemType } from './type'
-import { TodoItem } from './conponents/TodoItem'
-import { TodoHeading } from './conponents/TodoHeading'
+import { TodoSection } from './components/TodoSection'
 
 const LocalStorageKey = 'todos'
 
@@ -105,8 +104,7 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
         style={{
           display: 'flex',
         }}
-        //全体,未完了,完了それぞれのタスク件数を画面上に表示する  
-        // className="todo-count"
+      
         className="todo-count"
 
       >
@@ -153,55 +151,25 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
         }}
         
       >
-          
-        <TodoHeading      
-          title="未完了のタスク"
-          color='#007bff'
-        />
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }}
-        >
-          {todos.map((todo) => {
-            // 完了している TODO は表示しない
-            if (todo.completed) {
-              return <Fragment key={todo.id} />
-            }
 
-            return (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                onClick={() => toggleTodo(todo.id)}
-              />
-            )
-          })}
-        </div>
-       
-          <TodoHeading
-            title="完了したタスク"
-            color='#28a745'
-          />
-        
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }}
-        >
-          {todos.map((todo) => {
-            // 未完了の TODO は表示しない
-            if (!todo.completed) {
-              return <Fragment key={todo.id} />
-            }
+          <TodoSection
+        title="未完了のタスク"
+          color="#007bff"
+          todos={todos}
+         showCompleted={false}
+         onToggle={toggleTodo}
+        />
+        <TodoSection
+         title="完了したタスク"
+          color="#28a745"
+          todos={todos}
+         showCompleted={true}
+          onToggle={toggleTodo}
+           />
+
 
             return (
               <div
-                key={todo.id}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -214,15 +182,15 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
                 {/* チェックボックス */}
                 <input
                   type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id)}
+                  
+             
                   style={{
                     marginRight: '10px',
                   }}
                 />
                 {/* TODOのタイトル */}
                 <span>
-                  {todo.title}
+                  
                 </span>
                 {/* TODOの登録日 日時*/}
                 <span
@@ -232,13 +200,13 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
                     color: '#aaa',
                   }}
                 >
-                  完了日: {todo.completedAt?.toLocaleDateString()} {todo.completedAt?.toLocaleTimeString()}
+                
                 </span>
               </div>
             )
-          })}
+
         </div>
-      </div>
+      
     </>
   )
 }
