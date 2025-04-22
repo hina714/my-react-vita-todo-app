@@ -1,4 +1,4 @@
-import {　useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { TodoItemType } from './type'
 import { TodoSection } from './components/TodoSection'
@@ -167,46 +167,8 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
           onToggle={toggleTodo}
            />
 
-
-            return (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '10px',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  backgroundColor: '#fff',
-                }}
-              >
-                {/* チェックボックス */}
-                <input
-                  type="checkbox"
-                  
-             
-                  style={{
-                    marginRight: '10px',
-                  }}
-                />
-                {/* TODOのタイトル */}
-                <span>
-                  
-                </span>
-                {/* TODOの登録日 日時*/}
-                <span
-                  style={{
-                    marginLeft: 'auto',
-                    fontSize: '12px',
-                    color: '#aaa',
-                  }}
-                >
-                
-                </span>
-              </div>
-            )
-
         </div>
-      
+ 
     </>
   )
 }
