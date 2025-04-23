@@ -1,3 +1,4 @@
+// src/components/TodoHeading.tsx
 import React from 'react'
 
 type Props = {
@@ -13,7 +14,7 @@ export const TodoHeading: React.FC<Props> = ({ title, color }) => {
         fontSize: '20px',
         fontWeight: 'bold',
         marginBottom: '10px',
-        // Memo: 変数名とプロパティが同じ場合は省略できる
+        // Memo: 変数名とプロパティが同じ場合はしょうりx
         // color: color
         color
       }}

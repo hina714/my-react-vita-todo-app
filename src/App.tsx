@@ -3,6 +3,7 @@ import './App.css'
 import { TodoItemType } from './type'
 import { TodoSection } from './components/TodoSection'
 
+
 const LocalStorageKey = 'todos'
 
 function App() {
@@ -120,7 +121,7 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
             borderRadius: '4px',
             padding: '0 10px'
           }}
-          　　
+        
         />
         <button
           onClick={() => {
@@ -142,6 +143,13 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
           追加
         </button>
       </div>
+
+      タスク件数表示
+      
+      <div className="todo-count" style={{ margin: '1rem 0', fontSize: '14px' }}>
+      全体: {totalCount} 件/未完了: {incompleteCount} 件/完了: {completeCount} 件
+     </div>
+
 
       <div
         style={{
