@@ -15,7 +15,7 @@ type Props = {
   /** トグル時のハンドラ */
   onToggle: (id: number) => void;
    /** タイトル編集時のハンドラ */
-   onEdit: (id: number, newTitle: string) => void
+   onEdit?: (id: number, newTitle: string) => void
 };
 
 export function TodoSection({
@@ -68,7 +68,8 @@ export function TodoSection({
                  key={todo.id}
                  todo={todo}
                  onClick={() => onToggle(todo.id)}
-                 onEdit={(newTitle) => onEdit(todo.id, newTitle)}
+                 /* onEdit が渡されていれば呼び出す */
+                 onEdit={(newTitle: string) => onEdit?.(todo.id, newTitle)}
      />
               )
             }
