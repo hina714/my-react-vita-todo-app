@@ -14,6 +14,8 @@ type Props = {
   showCompleted: boolean;
   /** トグル時のハンドラ */
   onToggle: (id: number) => void;
+   /** タイトル編集時のハンドラ */
+   onEdit: (id: number, newTitle: string) => void
 };
 
 export function TodoSection({
@@ -22,6 +24,7 @@ export function TodoSection({
   todos,
   showCompleted,
   onToggle,
+  onEdit,
 }: Props) {
   // 完了済／未完了でフィルタ
   const sectionTodos = todos.filter(t => t.completed === showCompleted);
@@ -60,10 +63,13 @@ export function TodoSection({
                 </div>
               )
               : (
+               
                 <TodoItem
-                  todo={todo}
-                  onClick={() => onToggle(todo.id)}
-                />
+                 key={todo.id}
+                 todo={todo}
+                 onClick={() => onToggle(todo.id)}
+                 onEdit={(newTitle) => onEdit(todo.id, newTitle)}
+     />
               )
             }
           </Fragment>
