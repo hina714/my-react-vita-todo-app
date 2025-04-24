@@ -50,7 +50,7 @@ export function TodoItem({ todo, onClick, onEdit }: Props) {
       </span>
       <button onClick={onClick}
         style={{
-              backgroundColor: '#e83c3c',  // ボタンの背景色
+              backgroundColor: '#62b7f0',  // ボタンの背景色
               color: '#faeded',                // 文字色
               border: 'none',
               borderRadius: '4px',
