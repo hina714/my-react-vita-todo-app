@@ -96,6 +96,16 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
   useEffect(() => {
     fetchTodos()
   }, [])
+  //タイトルを更新する
+  const updateTodoTitle = (id: number, newTitle: string) => {
+    setTodos(prev =>
+      prev.map(t =>
+        t.id === id
+          ? { ...t, title: newTitle }
+          : t
+      )
+    );
+  };
 
 
   return (
@@ -164,6 +174,7 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
           todos={todos}
          showCompleted={false}
          onToggle={toggleTodo}
+         onEdit={updateTodoTitle}
         />
         <TodoSection
          title="完了したタスク"
@@ -171,6 +182,7 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
           todos={todos}
          showCompleted={true}
           onToggle={toggleTodo}
+          onEdit={updateTodoTitle}
            />
 
         </div>
