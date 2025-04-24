@@ -1,54 +1,51 @@
-import { TodoItemType } from "../type"
+// components/TodoItem.tsx
+import { useState } from 'react';
+import { TodoItemType } from '../type';
 
 type Props = {
-    todo: TodoItemType,
-    onClick: () => void,
-}
+  /** TODO アイテム */
+ todo: TodoItemType;
+  onClick: () => void;
+    /** タイトル編集時のハンドラ */
+ onEdit: (newTitle: string) => void;
+};
 
-export const TodoItem = ({ todo, onClick }: Props) => {
+export function TodoItem({ todo, onClick, onEdit }: Props) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState(todo.title);
 
-    const dateLabelData = todo.completed ? {
-        label: "完了日",
-        date: todo.completedAt,
-    } : {
-        label: "登録日",
-        date: todo.createdAt,
-    }
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '10px',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          backgroundColor: '#fff',
+  return isEditing ? (
+    <div className="todo-item editing">
+      <input
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          const trimmed = draft.trim();
+          if (trimmed) {
+            onEdit(trimmed);
+          }
+          setIsEditing(false);
         }}
       >
-        {/* チェックボックス */}
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={onClick}
-          style={{
-            marginRight: '10px',
-          }}
-        />
-        {/* TODOのタイトル */}
-        <span>
-          {todo.title}
-        </span>
-        {/* TODOの日時*/}
-        <span
-          style={{
-            marginLeft: 'auto',
-            fontSize: '12px',
-            color: '#aaa',
-          }}
-        >
-          {dateLabelData.label}: {dateLabelData?.date?.toLocaleDateString()} {dateLabelData?.date?.toLocaleTimeString()}
-        </span>
-      </div>
-    )
+        保存
+      </button>
+      <button onClick={() => {
+        setDraft(todo.title);
+        setIsEditing(false);
+      }}>
+        キャンセル
+      </button>
+    </div>
+  ) : (
+    <div className="todo-item">
+      <span onDoubleClick={() => setIsEditing(true)}>
+        {todo.title}
+      </span>
+      <button onClick={onClick}>
+        完了
+      </button>
+    </div>
+  );
 }
