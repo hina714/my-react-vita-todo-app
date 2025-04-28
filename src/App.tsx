@@ -5,11 +5,11 @@ import { TodoSection } from './components/TodoSection'
 
 const LocalStorageKey = 'todos'
 
-// 入力ボックスの値を保持するステート
-const [inputValue, setInputValue] = useState<string>('')
 
 function App() {
   const [todos, setTodos] = useState<TodoItemType[]>([])
+  const [inputValue, setInputValue] = useState<string>('')
+
 
   // カウント
   const totalCount      = todos.length
@@ -24,6 +24,7 @@ function App() {
       completed: false,
       createdAt: new Date(),
     }
+
     const newTodos = [...todos, newTodo]
     setTodos(newTodos)
     writeTodos(newTodos)

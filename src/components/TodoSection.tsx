@@ -68,7 +68,7 @@ export function TodoSection({
               : (
                
                 <TodoItem
-                 key={todo.id}
+
                  todo={todo}
                  onClick={() => onToggle(todo.id)}
                  /* onEdit が渡されていれば呼び出す */
