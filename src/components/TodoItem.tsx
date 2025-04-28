@@ -5,9 +5,10 @@ type Props = {
   todo: TodoItemType
   onClick: () => void
   onEdit: (newTitle: string) => void
+  onDelete?: () => void
 }
 
-export function TodoItem({ todo, onClick, onEdit }: Props) {
+export function TodoItem({ todo, onClick, onEdit, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState(todo.title)
 
@@ -50,8 +51,8 @@ export function TodoItem({ todo, onClick, onEdit }: Props) {
       </span>
       <button onClick={onClick}
         style={{
-              backgroundColor: '#62b7f0',  // ボタンの背景色
-              color: '#faeded',                // 文字色
+              backgroundColor: '#62b7f0',  
+              color: '#faeded',                
               border: 'none',
               borderRadius: '4px',
               padding: '4px 8px',
@@ -60,6 +61,22 @@ export function TodoItem({ todo, onClick, onEdit }: Props) {
       >
         完了
       </button>
+
+      {onDelete && (
+      <button
+         onClick={onDelete}
+         style={{
+           backgroundColor: '#dc3545', // 赤色
+           color: '#fff',
+           border: 'none',
+          borderRadius: '4px',
+          padding: '4px 8px',
+           cursor: 'pointer',
+         }}
+      >
+         削除
+      </button>
+     )}
     </div>
   )
 }
