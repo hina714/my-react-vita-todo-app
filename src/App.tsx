@@ -3,21 +3,20 @@ import './App.css'
 import { TodoItemType } from './type'
 import { TodoSection } from './components/TodoSection'
 
-
 const LocalStorageKey = 'todos'
+
+// 入力ボックスの値を保持するステート
+const [inputValue, setInputValue] = useState<string>('')
 
 function App() {
   const [todos, setTodos] = useState<TodoItemType[]>([])
 
-  // App.tsx の先頭あたり
-const totalCount      = todos.length
-const incompleteCount = todos.filter(t => !t.completed).length
-const completeCount   = todos.filter(t => t.completed).length
+  // カウント
+  const totalCount      = todos.length
+  const incompleteCount = todos.filter(t => !t.completed).length
+  const completeCount   = todos.filter(t => t.completed).length
 
-console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complete: ${completeCount}`)
-
-
-  // TODOの追加処理
+  // TODOの追加
   const addTodo = (title: string) => {
     const newTodo: TodoItemType = {
       id: Math.floor(Math.random() * 10000),
@@ -25,78 +24,30 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
       completed: false,
       createdAt: new Date(),
     }
-
     const newTodos = [...todos, newTodo]
-
-    // setTodos を使って、todos の状態を更新する
-    // 1. prevTodos を引数に取る関数を渡す
-    // 2. prevTodos の配列に新しい TODO を追加して返す
-    // 3. 新しい TODO を追加した配列を setTodos に渡す
     setTodos(newTodos)
-    // todos をローカルストレージに保存する
     writeTodos(newTodos)
   }
 
-  // TODOの完了
+  // TODOの完了トグル
   const toggleTodo = (id: number) => {
-    // setTodos を使って、todos の状態を更新する
-    // 1. prevTodos を引数に取る関数を渡す
-    // 2. prevTodos の配列の中から、id が一致する TODO を探す
-    // 3. 一致する TODO の completed を反転させて返す
-    // 4. 新しい TODO を追加した配列を setTodos に渡す
-    const newTodos = todos.map((todo) => {
-      // id が一致する TODO を探す
-      if (todo.id === id) {
-        // 一致する TODO の completed を反転させる
-        return {
-          ...todo,
-          completed: !todo.completed,
-          completedAt: todo.completed ? undefined : new Date(),
-        }
-      }
-      // 一致しない TODO はそのまま返す
-      return todo
-    })
-
+    const newTodos = todos.map(todo =>
+      todo.id === id
+        ? { ...todo, completed: !todo.completed, completedAt: todo.completed ? undefined : new Date() }
+        : todo
+    )
     setTodos(newTodos)
-    // todos をローカルストレージに保存する
     writeTodos(newTodos)
   }
 
-  const [inputValue, setInputValue] = useState('')
-
-  const writeTodos = (todos: TodoItemType[]) => {
-    const todosString = JSON.stringify(todos)
-
-    // ローカルストレージに todos を保存する
-    localStorage.setItem(LocalStorageKey, todosString)
-    console.log('todosString', todosString)
-  }    
-
-  const fetchTodos = () => {
-    // ローカルストレージから todos を取得する
-    const todos = localStorage.getItem(LocalStorageKey)
-    console.log('todos', todos)
-    if (todos) {
-      // JSON.parse を使って、文字列をオブジェクトに変換する
-      const parsedTodos: TodoItemType[] = JSON.parse(todos)
-      // parsedTodos の中の completedAt を Date 型に変換する
-      const todosWithDate = parsedTodos.map((todo) => {
-        return {
-          ...todo,
-          createdAt: new Date(todo.createdAt),
-          completedAt: todo.completedAt ? new Date(todo.completedAt) : undefined,
-        }
-      })
-      // setTodos を使って、todos の状態を更新する
-      setTodos(todosWithDate)
-    }
+  // 未完了タスクを削除
+  const deleteTodo = (id: number) => {
+    const newTodos = todos.filter(t => t.id !== id)
+    setTodos(newTodos)
+    writeTodos(newTodos)
   }
 
-  useEffect(() => {
-    fetchTodos()
-  }, [])
-  //タイトルを更新する
+  // タイトル編集ハンドラ
   const updateTodoTitle = (id: number, newTitle: string) => {
     setTodos(prev =>
       prev.map(t =>
@@ -104,89 +55,71 @@ console.log(`Total tasks: ${totalCount}, Incomplete: ${incompleteCount}, Complet
           ? { ...t, title: newTitle }
           : t
       )
-    );
-  };
+    )
+  }
 
+  // ローカルストレージ書き込み
+  const writeTodos = (todos: TodoItemType[]) => {
+    localStorage.setItem(LocalStorageKey, JSON.stringify(todos))
+  }
+
+  // ローカルストレージ読み込み
+  const fetchTodos = () => {
+    const stored = localStorage.getItem(LocalStorageKey)
+    if (stored) {
+      const parsed: TodoItemType[] = JSON.parse(stored)
+      setTodos(parsed.map(t => ({
+        ...t,
+        createdAt: new Date(t.createdAt),
+        completedAt: t.completedAt ? new Date(t.completedAt) : undefined,
+      })))
+    }
+  }
+
+  useEffect(fetchTodos, [])
 
   return (
     <>
       <h1>今日の一日やること リスト</h1>
-      <div
-        style={{
-          display: 'flex',
-        }}
-      
-        className="todo-count"
-
-      >
+      {/* 入力フォーム */}
+      <div className="todo-count" style={{ display: 'flex', gap: '0.5rem' }}>
         <input
           type="text"
           placeholder="TODOを追加"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          style={{
-            width: '100%',
-            height: '40px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            padding: '0 10px'
-          }}
-        
+          onChange={e => setInputValue(e.target.value)}
+          style={{ flex: 1, height: 40, padding: '0 10px', borderRadius: 4, border: '1px solid #ccc' }}
         />
-        <button
-          onClick={() => {
-            addTodo(inputValue)
-            // 入力値をリセット
-            setInputValue('')
-          }}
-          style={{
-            marginLeft: '10px',
-            width: '100px',
-            height: '40px',
-            backgroundColor: '#007bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '0 20px'
-          }}
-        >
+        <button onClick={() => { addTodo(inputValue); setInputValue('') }}>
           追加
         </button>
       </div>
 
-      <div className="todo-count" style={{ margin: '1rem 0', fontSize: '14px' }}>
-      全体: {totalCount} 件/未完了: {incompleteCount} 件/完了: {completeCount} 件
-     </div>
+      {/* 件数表示 */}
+      <div className="todo-count" style={{ margin: '1rem 0', fontSize: 14 }}>
+        全体: {totalCount} 件／未完了: {incompleteCount} 件／完了: {completeCount} 件
+      </div>
 
-
-      <div
-        style={{
-          marginTop: '20px',
-          borderTop: '1px solid #ccc',
-          paddingTop: '10px',
-        }}
-        
-      >
-
-          <TodoSection
-        title="未完了のタスク"
+      {/* セクション */}
+      <div style={{ marginTop: 20, borderTop: '1px solid #ccc', paddingTop: 10 }}>
+        <TodoSection
+          title="未完了のタスク"
           color="#007bff"
           todos={todos}
-         showCompleted={false}
-         onToggle={toggleTodo}
-         onEdit={updateTodoTitle}
-        />
-        <TodoSection
-         title="完了したタスク"
-          color="#28a745"
-          todos={todos}
-         showCompleted={true}
+          showCompleted={false}
           onToggle={toggleTodo}
           onEdit={updateTodoTitle}
-           />
-
-        </div>
- 
+          onDelete={deleteTodo}
+        />
+        <TodoSection
+          title="完了したタスク"
+          color="#28a745"
+          todos={todos}
+          showCompleted={true}
+          onToggle={toggleTodo}
+          // onDelete は渡さない
+        />
+      </div>
     </>
   )
 }
