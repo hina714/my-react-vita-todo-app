@@ -9,6 +9,8 @@ const LocalStorageKey = 'todos'
 function App() {
   const [todos, setTodos] = useState<TodoItemType[]>([])
   const [inputValue, setInputValue] = useState<string>('')
+  const [tagInput, setTagInput] = useState<string>('');
+
 
 
   // カウント
@@ -23,6 +25,7 @@ function App() {
       title,
       completed: false,
       createdAt: new Date(),
+      tags: [],   
     }
 
     const newTodos = [...todos, newTodo]
@@ -91,7 +94,18 @@ function App() {
           onChange={e => setInputValue(e.target.value)}
           style={{ flex: 1, height: 40, padding: '0 10px', borderRadius: 4, border: '1px solid #ccc' }}
         />
-        <button onClick={() => { addTodo(inputValue); setInputValue('') }}>
+        <input
+          type="text"
+          placeholder="タグをカンマ区切りで追加"
+         value={tagInput}
+         onChange={e => setTagInput(e.target.value)}
+         style={{ flex: 1, height: 40, padding: '0 10px', borderRadius: 4, border: '1px solid #ccc' }}
+       />
+        <button onClick={() => { 
+          const tags = tagInput.split(',').map(t => t.trim()).filter(Boolean)
+          addTodo(inputValue, tags); 
+          setInputValue('') }}>
+          setTagInput('')
           追加
         </button>
       </div>
