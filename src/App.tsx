@@ -9,8 +9,7 @@ const LocalStorageKey = 'todos'
 function App() {
   const [todos, setTodos] = useState<TodoItemType[]>([])
   const [inputValue, setInputValue] = useState<string>('')
-  const [tagInput, setTagInput] = useState<string>('');
-
+  
 
 
   // カウント
