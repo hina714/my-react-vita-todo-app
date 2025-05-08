@@ -12,6 +12,7 @@ export function TodoItem({ todo, onClick, onEdit, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState(todo.title)
 
+
   // 編集モード中
   if (isEditing) {
     return (
@@ -77,6 +78,21 @@ export function TodoItem({ todo, onClick, onEdit, onDelete }: Props) {
          削除
       </button>
      )}
+     <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
+       {todo.tags.map(tag => (
+         <span 
+           key={tag} 
+           style={{
+             backgroundColor: '#eee',
+             padding: '2px 6px',
+             borderRadius: '4px',
+             fontSize: '12px'
+           }}
+        >
+           {tag}
+         </span>
+      ))}
+     </div>
     </div>
   )
 }
